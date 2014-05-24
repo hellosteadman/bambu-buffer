@@ -23,7 +23,7 @@ REFRESHED_MESSAGES = getattr(s, 'BUFFER_REFRESHED_MESSAGES',
 AUTOPOST_MODELS = getattr(s, 'BUFFER_AUTOPOST_MODELS',
     (
         (
-            'blog.Post',
+            'bambu_blog.Post',
             'author', {
                 'published': True,
                 'date__lte': now

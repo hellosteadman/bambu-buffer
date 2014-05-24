@@ -14,33 +14,48 @@ class Migration(SchemaMigration):
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(related_name='buffer_tokens', unique=True, to=orm['auth.User'])),
             ('token', self.gf('django.db.models.fields.CharField')(max_length=36)),
         ))
-        db.send_create_signal(u'buffer', ['BufferToken'])
+        db.send_create_signal('bambu_buffer', ['BufferToken'])
 
         # Adding model 'BufferService'
         db.create_table('buffer_service', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('token', self.gf('django.db.models.fields.related.ForeignKey')(related_name='services', to=orm['buffer.BufferToken'])),
+            ('token', self.gf('django.db.models.fields.related.ForeignKey')(related_name='services', to=orm['bambu_buffer.BufferToken'])),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=30)),
             ('remote_id', self.gf('django.db.models.fields.CharField')(max_length=36)),
             ('username', self.gf('django.db.models.fields.CharField')(max_length=30)),
         ))
-        db.send_create_signal(u'buffer', ['BufferService'])
+        db.send_create_signal('bambu_buffer', ['BufferService'])
 
         # Adding model 'BufferProfile'
         db.create_table('buffer_profile', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('service', self.gf('django.db.models.fields.related.ForeignKey')(related_name='profiles', to=orm['buffer.BufferService'])),
+            ('service', self.gf('django.db.models.fields.related.ForeignKey')(related_name='profiles', to=orm['bambu_buffer.BufferService'])),
             ('avatar', self.gf('django.db.models.fields.URLField')(max_length=255)),
             ('created_at', self.gf('django.db.models.fields.DateTimeField')()),
             ('default', self.gf('django.db.models.fields.BooleanField')(default=True)),
             ('formatted_username', self.gf('django.db.models.fields.CharField')(max_length=100)),
             ('remote_id', self.gf('django.db.models.fields.CharField')(unique=True, max_length=36)),
             ('schedules', self.gf('django.db.models.fields.TextField')()),
+            ('selected', self.gf('django.db.models.fields.BooleanField')()),
         ))
-        db.send_create_signal(u'buffer', ['BufferProfile'])
+        db.send_create_signal('bambu_buffer', ['BufferProfile'])
+
+        # Adding model 'BufferedItem'
+        db.create_table('buffer_buffereditem', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('content_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contenttypes.ContentType'])),
+            ('object_id', self.gf('django.db.models.fields.PositiveIntegerField')()),
+        ))
+        db.send_create_signal('bambu_buffer', ['BufferedItem'])
+
+        # Adding unique constraint on 'BufferedItem', fields ['content_type', 'object_id']
+        db.create_unique('buffer_buffereditem', ['content_type_id', 'object_id'])
 
 
     def backwards(self, orm):
+        # Removing unique constraint on 'BufferedItem', fields ['content_type', 'object_id']
+        db.delete_unique('buffer_buffereditem', ['content_type_id', 'object_id'])
+
         # Deleting model 'BufferToken'
         db.delete_table('buffer_token')
 
@@ -49,6 +64,9 @@ class Migration(SchemaMigration):
 
         # Deleting model 'BufferProfile'
         db.delete_table('buffer_profile')
+
+        # Deleting model 'BufferedItem'
+        db.delete_table('buffer_buffereditem')
 
 
     models = {
@@ -81,7 +99,13 @@ class Migration(SchemaMigration):
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "u'user_set'", 'blank': 'True', 'to': u"orm['auth.Permission']"}),
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
-        u'buffer.bufferprofile': {
+        'bambu_buffer.buffereditem': {
+            'Meta': {'unique_together': "(('content_type', 'object_id'),)", 'object_name': 'BufferedItem', 'db_table': "'buffer_buffereditem'"},
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contenttypes.ContentType']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'object_id': ('django.db.models.fields.PositiveIntegerField', [], {})
+        },
+        'bambu_buffer.bufferprofile': {
             'Meta': {'object_name': 'BufferProfile', 'db_table': "'buffer_profile'"},
             'avatar': ('django.db.models.fields.URLField', [], {'max_length': '255'}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {}),
@@ -90,17 +114,18 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'remote_id': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '36'}),
             'schedules': ('django.db.models.fields.TextField', [], {}),
-            'service': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'profiles'", 'to': u"orm['buffer.BufferService']"})
+            'selected': ('django.db.models.fields.BooleanField', [], {}),
+            'service': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'profiles'", 'to': "orm['bambu_buffer.BufferService']"})
         },
-        u'buffer.bufferservice': {
+        'bambu_buffer.bufferservice': {
             'Meta': {'object_name': 'BufferService', 'db_table': "'buffer_service'"},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
             'remote_id': ('django.db.models.fields.CharField', [], {'max_length': '36'}),
-            'token': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'services'", 'to': u"orm['buffer.BufferToken']"}),
+            'token': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'services'", 'to': "orm['bambu_buffer.BufferToken']"}),
             'username': ('django.db.models.fields.CharField', [], {'max_length': '30'})
         },
-        u'buffer.buffertoken': {
+        'bambu_buffer.buffertoken': {
             'Meta': {'object_name': 'BufferToken', 'db_table': "'buffer_token'"},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'token': ('django.db.models.fields.CharField', [], {'max_length': '36'}),
@@ -115,4 +140,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['buffer']
+    complete_apps = ['bambu_buffer']

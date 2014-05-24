@@ -8,7 +8,7 @@ def post_save_receiver(sender, instance, **kwargs):
     model = site.get_info(type(instance))
     if not model or not any(model):
         print '%s not registered' % (
-            unicode(instance._meta.verbose_name).capitalize()
+            unicode(type(instance)._meta.verbose_name).capitalize()
         )
 
         return
@@ -81,11 +81,15 @@ class BufferSite(object):
                 post_kwargs = {}
 
             try:
-                model = get_model(*name.split('.'))
+                model = get_model(*name.split('.'), only_installed = False)
             except:
                 logger.warn('Model %s not found' % name)
                 continue
-
+            
+            if not model:
+                logger.warn('Model %s not found' % name)
+                continue
+            
             field = model._meta.get_field_by_name(author_field)
             if not any(field) or field[0] is None:
                 raise Exception(

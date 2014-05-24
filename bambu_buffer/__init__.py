@@ -9,7 +9,7 @@ from datetime import datetime, date
 from threading import Thread
 import requests
 
-__version__ = '2.0'
+__version__ = '2.0.1'
 site = BufferSite()
 
 class BufferThread(Thread):
