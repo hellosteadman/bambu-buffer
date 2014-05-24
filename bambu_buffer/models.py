@@ -5,10 +5,6 @@ from bambu_buffer import log
 from datetime import datetime, timedelta
 import requests, json
 
-class CustomTitleString(str):
-    def title(self):
-        return str(self[6:]).title()
-
 class BufferToken(models.Model):
     user = models.ForeignKey('auth.User', related_name = 'buffer_tokens', unique = True)
     token = models.CharField(max_length = 36)
@@ -74,7 +70,6 @@ class BufferToken(models.Model):
 
     class Meta:
         db_table = 'buffer_token'
-        app_label = CustomTitleString('bambu_buffer')
 
 class BufferService(models.Model):
     token = models.ForeignKey(BufferToken, related_name = 'services')
@@ -91,7 +86,6 @@ class BufferService(models.Model):
 
     class Meta:
         db_table = 'buffer_service'
-        app_label = CustomTitleString('bambu_buffer')
 
 class BufferProfile(models.Model):
     service = models.ForeignKey(BufferService, related_name = 'profiles')
@@ -112,7 +106,6 @@ class BufferProfile(models.Model):
 
     class Meta:
         db_table = 'buffer_profile'
-        app_label = CustomTitleString('bambu_buffer')
 
 class BufferedItem(models.Model):
     content_type = models.ForeignKey('contenttypes.ContentType')
@@ -121,4 +114,3 @@ class BufferedItem(models.Model):
     class Meta:
         unique_together = ('content_type', 'object_id')
         db_table = 'buffer_buffereditem'
-        app_label = CustomTitleString('bambu_buffer')
