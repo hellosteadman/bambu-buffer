@@ -4,7 +4,7 @@ from os import path
 
 setup(
     name = 'bambu-buffer',
-    version = '2.1',
+    version = '2.1.1',
     description = 'Post to Buffer and manage profile settings through a Django-powered site',
     author = 'Steadman',
     author_email = 'mark@steadman.io',
@@ -12,9 +12,7 @@ setup(
     long_description = open(path.join(path.dirname(__file__), 'README')).read(),
     packages = [
         'bambu_buffer',
-        'bambu_buffer.migrations',
-        'bambu_buffer.management',
-        'bambu_buffer.management.commands'
+        'bambu_buffer.migrations'
     ],
     package_data = {
         'bambu_buffer': [

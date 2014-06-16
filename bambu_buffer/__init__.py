@@ -8,7 +8,7 @@ from datetime import datetime, date
 from threading import Thread
 import requests
 
-__version__ = '2.1'
+__version__ = '2.1.1'
 
 class BufferThread(Thread):
     def __init__(self, token, data, *args, **kwargs):
