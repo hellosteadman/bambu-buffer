@@ -4,13 +4,11 @@ from django.db.models import Model
 from bambu_buffer.exceptions import *
 from bambu_buffer.models import BufferToken, BufferProfile, BufferedItem
 from bambu_buffer.settings import POST_URL, TIMEOUT, AUTOPOST_MODELS
-from bambu_buffer.sites import BufferSite
 from datetime import datetime, date
 from threading import Thread
 import requests
 
 __version__ = '2.0.1'
-site = BufferSite()
 
 class BufferThread(Thread):
     def __init__(self, token, data, *args, **kwargs):
@@ -105,5 +103,3 @@ def post(item, author, **kwargs):
                 )
 
     BufferThread(token.token, data).start()
-
-site.hookup_signals(AUTOPOST_MODELS)

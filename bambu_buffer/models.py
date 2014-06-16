@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.timezone import pytz
 from bambu_buffer.settings import PROFILES_URL, TIMEOUT
 from bambu_buffer import log
+from bambu_buffer.receivers import *
 from datetime import datetime, timedelta
 import requests, json
 
