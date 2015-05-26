@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 import requests, json
 
 class BufferToken(models.Model):
-    user = models.ForeignKey('auth.User', related_name = 'buffer_tokens', unique = True)
+    user = models.OneToOneField('auth.User', related_name = 'buffer_tokens')
     token = models.CharField(max_length = 36)
 
     def __unicode__(self):

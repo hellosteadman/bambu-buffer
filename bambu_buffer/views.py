@@ -58,7 +58,7 @@ def callback(request):
         data = response.json()
         token = data.get('access_token')
 
-        with transaction.commit_on_success():
+        with transaction.atomic():
             request.user.buffer_tokens.all().delete()
             request.user.buffer_tokens.create(
                 token = token
