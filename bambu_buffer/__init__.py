@@ -8,7 +8,7 @@ from datetime import datetime, date
 from threading import Thread
 import requests
 
-__version__ = '3.0'
+__version__ = '3.1'
 default_app_config = 'bambu_buffer.apps.BufferConfig'
 
 class BufferThread(Thread):
