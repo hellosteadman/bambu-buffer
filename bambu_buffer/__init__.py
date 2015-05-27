@@ -31,7 +31,7 @@ class BufferThread(Thread):
 
 def post(item, author, **kwargs):
     try:
-        token = author.buffer_tokens.get()
+        token = author.buffer_token
     except BufferToken.DoesNotExist:
         return
 

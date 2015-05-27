@@ -6,7 +6,7 @@ from bambu_buffer.receivers import *
 import requests, json
 
 class BufferToken(models.Model):
-    user = models.OneToOneField('auth.User', related_name = 'buffer_tokens')
+    user = models.OneToOneField('auth.User', related_name = 'buffer_token')
     token = models.CharField(max_length = 36)
 
     def __unicode__(self):

@@ -59,8 +59,13 @@ def callback(request):
         token = data.get('access_token')
 
         with transaction.atomic():
-            request.user.buffer_tokens.all().delete()
-            request.user.buffer_tokens.create(
+            try:
+                request.user.buffer_token.delete()
+            except BufferToken.DoesNotExist:
+                pass
+
+            BufferToken.objects.create(
+                user = user,
                 token = token
             )
 
@@ -76,7 +81,7 @@ def callback(request):
 @login_required
 def profiles(request):
     try:
-        token = request.user.buffer_tokens.get()
+        token = request.user.buffer_token
     except BufferToken.DoesNotExist:
         return HttpResponseRedirect(
             reverse('buffer_auth')
@@ -120,7 +125,7 @@ def profiles(request):
 @login_required
 def refresh(request):
     try:
-        token = request.user.buffer_tokens.get()
+        token = request.user.buffer_token
     except BufferToken.DoesNotExist:
         return HttpResponseRedirect(
             reverse('buffer_auth')

@@ -57,7 +57,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('token', models.CharField(max_length=36)),
-                ('user', models.OneToOneField(related_name='buffer_tokens', to=settings.AUTH_USER_MODEL)),
+                ('user', models.OneToOneField(related_name='buffer_token', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'db_table': 'buffer_token',
