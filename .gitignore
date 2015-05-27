@@ -1,1 +1,3 @@
 *.pyc
+bambu_buffer.egg-info
+dist

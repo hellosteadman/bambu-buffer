@@ -1,9 +1,8 @@
 from django.db import models
-from django.utils.timezone import pytz
+from django.utils.timezone import now
 from bambu_buffer.settings import PROFILES_URL, TIMEOUT
 from bambu_buffer import log
 from bambu_buffer.receivers import *
-from datetime import datetime, timedelta
 import requests, json
 
 class BufferToken(models.Model):
@@ -45,18 +44,9 @@ class BufferToken(models.Model):
 
                     services[service.remote_id] = service
 
-                epoch = datetime(1970, 1, 1, 0, 0, 0,
-                    tzinfo = pytz.timezone(
-                        profile['timezone']
-                    )
-                )
-
                 service.profiles.create(
                     avatar = profile.get('avatar_https',
                         profile.get('avatar')
-                    ),
-                    created_at = epoch + timedelta(
-                        seconds = profile['created_at']
                     ),
                     default = profile['default'],
                     selected = profile['default'],
@@ -104,6 +94,12 @@ class BufferProfile(models.Model):
     @property
     def icon(self):
         return self.service.icon
+
+    def save(self, *args, **kwargs):
+        if not self.created_at:
+            self.created_at = now()
+
+        super(BufferProfile, self).save(*args, **kwargs)
 
     class Meta:
         db_table = 'buffer_profile'

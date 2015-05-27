@@ -47,11 +47,6 @@ def post(item, author, **kwargs):
             object_id = item.pk,
             content_type = content_type
         ).exists():
-            print '%s %d has already been sent to Buffer' % (
-                unicode(item._meta.verbose_name).capitalize(),
-                item.pk
-            )
-
             return
 
         BufferedItem.objects.create(
