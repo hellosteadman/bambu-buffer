@@ -1,13 +1,13 @@
-from django.contrib.auth.decorators import login_required
-from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
+from bambu_buffer import settings, log
+from bambu_buffer.models import BufferToken, BufferProfile
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.utils.http import urlencode
-from bambu_buffer import settings, log
-from bambu_buffer.models import BufferToken, BufferProfile
 import requests
 
 @login_required
@@ -23,7 +23,7 @@ def auth(request):
                     'client_id': settings.CLIENT_ID,
                     'redirect_uri': 'http%s://%s%s' % (
                         request.is_secure() and 's' or '',
-                        Site.objects.get_current(),
+                        get_current_site().domain,
                         reverse('buffer_callback')
                     ),
                     'response_type': settings.RESPONSE_TYPE
@@ -41,7 +41,7 @@ def callback(request):
             'client_secret': settings.CLIENT_SECRET,
             'redirect_uri': 'http%s://%s%s' % (
                 request.is_secure() and 's' or '',
-                Site.objects.get_current(),
+                get_current_site().domain,
                 reverse('buffer_callback')
             ),
             'code': request.GET.get('code'),

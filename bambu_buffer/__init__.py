@@ -1,5 +1,5 @@
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.sites.models import Site
+from django.contrib.sites.shortcuts import get_current_site
 from django.db.models import Model
 from bambu_buffer.exceptions import *
 from bambu_buffer.models import BufferToken, BufferProfile, BufferedItem
@@ -8,7 +8,7 @@ from datetime import datetime, date
 from threading import Thread
 import requests
 
-__version__ = '3.1'
+__version__ = '3.2'
 default_app_config = 'bambu_buffer.apps.BufferConfig'
 
 class BufferThread(Thread):
@@ -39,7 +39,7 @@ def post(item, author, **kwargs):
         url = kwargs.get('url')
     elif isinstance(item, Model):
         url = u'http://%s%s' % (
-            Site.objects.get_current().domain, item.get_absolute_url()
+            get_current_site().domain, item.get_absolute_url()
         )
 
         content_type = ContentType.objects.get_for_model(item)
