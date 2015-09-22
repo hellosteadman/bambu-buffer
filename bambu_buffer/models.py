@@ -61,6 +61,7 @@ class BufferToken(models.Model):
 
     class Meta:
         db_table = 'buffer_token'
+        app_label = 'bambu_buffer'
 
 class BufferService(models.Model):
     token = models.ForeignKey(BufferToken, related_name = 'services')
@@ -77,6 +78,7 @@ class BufferService(models.Model):
 
     class Meta:
         db_table = 'buffer_service'
+        app_label = 'bambu_buffer'
 
 class BufferProfile(models.Model):
     service = models.ForeignKey(BufferService, related_name = 'profiles')
@@ -103,6 +105,7 @@ class BufferProfile(models.Model):
 
     class Meta:
         db_table = 'buffer_profile'
+        app_label = 'bambu_buffer'
 
 class BufferedItem(models.Model):
     content_type = models.ForeignKey('contenttypes.ContentType')
@@ -111,3 +114,4 @@ class BufferedItem(models.Model):
     class Meta:
         unique_together = ('content_type', 'object_id')
         db_table = 'buffer_buffereditem'
+        app_label = 'bambu_buffer'
