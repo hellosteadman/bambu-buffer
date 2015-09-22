@@ -1,5 +1,4 @@
 from logging import getLogger
-from django.db.models.loading import get_model
 from django.db.models.signals import post_save
 
 def post_save_receiver(sender, instance, **kwargs):
