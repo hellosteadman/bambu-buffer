@@ -11,7 +11,7 @@ def post_save_receiver(sender, instance, **kwargs):
 
         name = m.pop(0)
         app, model = name.lower().split('.')
-        if app != type(instance)._meta.app_label or model != instance._meta.module_name:
+        if app != type(instance)._meta.app_label or model != instance._meta.model_name:
             continue
 
         if any(m):
