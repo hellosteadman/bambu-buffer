@@ -2,7 +2,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.shortcuts import get_current_site
 from django.db.models import Model
 from bambu_buffer.exceptions import *
-from bambu_buffer.settings import POST_URL, TIMEOUT, AUTOPOST_MODELS
+from bambu_buffer.settings import ENABLED, POST_URL, TIMEOUT, AUTOPOST_MODELS
 from datetime import datetime, date
 from threading import Thread
 import requests
@@ -29,6 +29,9 @@ class BufferThread(Thread):
             log.error(response.json())
 
 def post(item, author, **kwargs):
+    if not ENABLED:
+        return
+    
     from bambu_buffer.models import BufferToken, BufferProfile, BufferedItem
 
     try:
