@@ -42,11 +42,9 @@ def post(item, author, **kwargs):
     if 'url' in kwargs:
         url = kwargs.get('url')
     elif isinstance(item, Model):
-        url = u'http://%s%s' % (
-            get_current_site().domain, item.get_absolute_url()
-        )
-
+        url = item.get_absolute_url()
         content_type = ContentType.objects.get_for_model(item)
+        
         if BufferedItem.objects.filter(
             object_id = item.pk,
             content_type = content_type

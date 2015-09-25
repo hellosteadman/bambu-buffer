@@ -23,7 +23,7 @@ def auth(request):
                     'client_id': settings.CLIENT_ID,
                     'redirect_uri': 'http%s://%s%s' % (
                         request.is_secure() and 's' or '',
-                        get_current_site().domain,
+                        get_current_site(request).domain,
                         reverse('buffer_callback')
                     ),
                     'response_type': settings.RESPONSE_TYPE
@@ -41,7 +41,7 @@ def callback(request):
             'client_secret': settings.CLIENT_SECRET,
             'redirect_uri': 'http%s://%s%s' % (
                 request.is_secure() and 's' or '',
-                get_current_site().domain,
+                get_current_site(request).domain,
                 reverse('buffer_callback')
             ),
             'code': request.GET.get('code'),
