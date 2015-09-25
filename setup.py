@@ -4,7 +4,7 @@ from os import path
 
 setup(
     name = 'bambu-buffer',
-    version = '3.2.2',
+    version = '3.3',
     description = 'Post to Buffer and manage profile settings through a Django-powered site',
     author = 'Steadman',
     author_email = 'mark@steadman.io',
