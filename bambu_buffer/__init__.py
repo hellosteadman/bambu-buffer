@@ -7,7 +7,7 @@ from datetime import datetime, date
 from threading import Thread
 import requests
 
-__version__ = '3.3.1'
+__version__ = '3.3.2'
 default_app_config = 'bambu_buffer.apps.BufferConfig'
 
 class BufferThread(Thread):
@@ -44,7 +44,7 @@ def post(item, author, **kwargs):
     elif isinstance(item, Model):
         url = item.get_absolute_url()
         content_type = ContentType.objects.get_for_model(item)
-        
+
         if BufferedItem.objects.filter(
             object_id = item.pk,
             content_type = content_type
