@@ -2,7 +2,7 @@ from django.conf import settings as s
 from django.utils.timezone import now
 from os import environ
 
-ENABLED = getattr(s, 'BUFFER_ENABLED', not environ.get('BUFFER_DISABLED'))
+ENABLED = getattr(s, 'BUFFER_ENABLED', True) and not environ.get('BUFFER_DISABLED')
 CLIENT_ID = s.BUFFER_CLIENT_ID
 CLIENT_SECRET = s.BUFFER_CLIENT_SECRET
 AUTH_REDIRECT = getattr(s, 'BUFFER_AUTH_REDIRECT', '/')
